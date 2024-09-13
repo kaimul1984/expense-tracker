@@ -87,12 +87,12 @@ const FinanceChart = () => {
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis
             dataKey="name"
-            tick={{ fill: "#0f172a", fontSize: "15" }}
+            tick={{ fill: "#0f172a", fontSize: "12" }}
             tickLine={false}
             tickMargin={10}
           />
           <YAxis
-            tick={{ fill: "#94a3b8", fontSize: "15" }}
+            tick={{ fill: "#94a3b8", fontSize: "12" }}
             tickLine={false}
             tickMargin={20}
           />
@@ -106,14 +106,14 @@ const FinanceChart = () => {
             type="monotone"
             dataKey="income"
             stroke="#5eead4"
-            strokeWidth={5}
+            strokeWidth={3}
           />
 
           <Line
             type="monotone"
             dataKey="expense"
             stroke="#93c5fd"
-            strokeWidth={5}
+            strokeWidth={3}
           />
         </LineChart>
       </ResponsiveContainer>
