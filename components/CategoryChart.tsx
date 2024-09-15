@@ -65,7 +65,7 @@ export default function CategoryChart() {
         <h1>Finance</h1>
         <Image src="/moreDark.png" alt="" width={20} height={20} />
       </div>
-      <ResponsiveContainer width="100%" height="100%">
+      <ResponsiveContainer width="100%" height="90%">
         <PieChart width={400} height={400}>
           <Pie
             data={data}

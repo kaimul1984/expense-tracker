@@ -28,60 +28,103 @@ import { DeleteBtn } from "@/components/DeleteBtn";
 import { IExpense } from "@/lib/models/expense.model";
 import { getAllExpenses } from "@/lib/actions/expense.action";
 import { format, parseISO } from "date-fns";
+import PaginationBtn from "@/components/Pagination";
 
 const invoices = [
   {
+    _id: 1,
     date: "Mon 02, 2024",
     details: "vege, grocery, milk",
     category: "grocery",
     payee: "Woolworths",
     amount: "$250.00",
-    paymentMethod: "Credit Card",
+    payMethod: "Credit Card",
   },
 
   {
+    _id: 2,
     date: "Tue 03, 2024",
     details: "vege, grocery, milk",
     category: "grocery",
     payee: "Woolworths",
     amount: "$250.00",
-    paymentMethod: "Credit Card",
+    payMethod: "Credit Card",
   },
 
   {
+    _id: 3,
     date: "Wed 04, 2024",
     details: "vege, grocery, milk",
     category: "grocery",
     payee: "Woolworths",
     amount: "$250.00",
-    paymentMethod: "Credit Card",
+    payMethod: "Credit Card",
   },
 
   {
+    _id: 4,
     date: "Mon 03, 2024",
     details: "vege, grocery, milk",
     category: "grocery",
     payee: "Woolworths",
     amount: "$250.00",
-    paymentMethod: "Credit Card",
+    payMethod: "Credit Card",
   },
 
   {
+    _id: 5,
     date: "Mon 05, 2024",
     details: "vege, grocery, milk",
     category: "grocery",
     payee: "Woolworths",
     amount: "$250.00",
-    paymentMethod: "Credit Card",
+    payMethod: "Credit Card",
   },
 
   {
+    _id: 6,
     date: "Mon 07, 2024",
     details: "vege, grocery, milk",
     category: "grocery",
     payee: "Woolworths",
     amount: "$250.00",
-    paymentMethod: "Credit Card",
+    payMethod: "Credit Card",
+  },
+  {
+    _id: 7,
+    date: "Mon 07, 2024",
+    details: "vege, grocery, milk",
+    category: "grocery",
+    payee: "Woolworths",
+    amount: "$250.00",
+    payMethod: "Credit Card",
+  },
+  {
+    _id: 8,
+    date: "Mon 07, 2024",
+    details: "vege, grocery, milk",
+    category: "grocery",
+    payee: "Woolworths",
+    amount: "$250.00",
+    payMethod: "Credit Card",
+  },
+  {
+    _id: 9,
+    date: "Mon 07, 2024",
+    details: "vege, grocery, milk",
+    category: "grocery",
+    payee: "Woolworths",
+    amount: "$250.00",
+    payMethod: "Credit Card",
+  },
+  {
+    _id: 10,
+    date: "Mon 07, 2024",
+    details: "vege, grocery, milk",
+    category: "grocery",
+    payee: "Woolworths",
+    amount: "$250.00",
+    payMethod: "Credit Card",
   },
 ];
 
@@ -119,7 +162,6 @@ export default async function Expenses() {
         </DialogContent>
       </Dialog>
       <Table className="border-2 border-collapse">
-        <TableCaption>A list of your recent invoices.</TableCaption>
         <TableHeader className="bg-gray-200">
           <TableRow>
             <TableHead>Date</TableHead>
@@ -132,10 +174,11 @@ export default async function Expenses() {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {expenses.map((item) => (
+          {invoices.map((item) => (
             <TableRow key={item._id}>
               <TableCell className="font-medium">
-                {format(parseISO(item.createdAt.toString()), "dd LLL, yyyy")}
+                {/* {format(parseISO(item.createdAt.toString()), "dd LLL, yyyy")} */}
+                {item.date}
               </TableCell>
               <TableCell className="font-medium capitalize">
                 {item.details}
@@ -160,6 +203,7 @@ export default async function Expenses() {
           ))}
         </TableBody>
       </Table>
+      <PaginationBtn />
     </div>
   );
 }

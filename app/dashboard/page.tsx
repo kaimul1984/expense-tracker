@@ -27,7 +27,7 @@ export default function Dashboard() {
           <p className="text-right">01-09-2024</p>
         </div>
       </div>
-      <div className="w-full flex  flex-wrap  ">
+      <div className="w-full flex flex-wrap ">
         {/* left */}
         <div className="left w-full lg:w-2/3  flex flex-col gap-4">
           {/* Card */}
@@ -58,7 +58,7 @@ export default function Dashboard() {
           </div>
         </div>
         {/* Right */}
-        <div className="right w-1/3 px-4 min-w-[400px]">
+        <div className="right w-full lg:w-1/3 px-4 min-w-[400px]">
           <div className="w-full h-[300px] shadow-xl">
             <CategoryChart />
           </div>
@@ -67,7 +67,7 @@ export default function Dashboard() {
               <h1>Categories</h1>
               <Image src="/moreDark.png" alt="" width={20} height={20} />
             </div>
-            <div className="flex items-center justify-between flex-wrap gap-2 ">
+            <div className="w-full flex items-center justify-between flex-wrap gap-2 ">
               <Category />
               <Category />
               <Category />
