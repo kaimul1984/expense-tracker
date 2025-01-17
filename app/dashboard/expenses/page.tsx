@@ -92,7 +92,7 @@ const invoices = [
   },
   {
     _id: 7,
-    date: "Mon 07, 2024",
+    date: "Mon 09, 2024",
     details: "vege, grocery, milk",
     category: "grocery",
     payee: "Woolworths",
@@ -101,7 +101,7 @@ const invoices = [
   },
   {
     _id: 8,
-    date: "Mon 07, 2024",
+    date: "Mon 12, 2024",
     details: "vege, grocery, milk",
     category: "grocery",
     payee: "Woolworths",
