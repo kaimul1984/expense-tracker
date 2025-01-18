@@ -16,24 +16,28 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { createExpense } from "@/lib/actions/expense.action";
+import { useRouter } from "next/navigation";
+import Dropdown from "./Dropdown";
 
 const formSchema = z.object({
   details: z.string().min(2, {
     message: "Username must be at least 2 characters.",
   }),
-  category: z.string(),
+  categoryId: z.string(),
   payee: z.string(),
   amount: z.coerce.number().min(0.1),
   payMethod: z.string(),
 });
 
 export function FormComponent() {
+  const router = useRouter();
+
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       details: "",
-      category: "",
+      categoryId: "",
       payee: "",
       amount: 0.1,
       payMethod: "",
@@ -53,6 +57,7 @@ export function FormComponent() {
 
       if (newExpenses) {
         form.reset();
+        router.push("/dashboard/expenses");
       }
     } catch (error) {
       console.log(error);
@@ -80,12 +85,15 @@ export function FormComponent() {
           <div className=" w-full lg:flex-1 flex flex-col gap-2">
             <FormField
               control={form.control}
-              name="category"
+              name="categoryId"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Category</FormLabel>
                   <FormControl>
-                    <Input placeholder="Add category" {...field} />
+                    <Dropdown
+                      onChangeHandler={field.onChange}
+                      value={field.value}
+                    />
                   </FormControl>
                 </FormItem>
               )}

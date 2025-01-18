@@ -3,27 +3,25 @@ import mongoose, { Date, model, models, Schema } from "mongoose";
 export type IExpense = {
   _id: string;
   details: string;
-  category: string;
+  category: { _id: string; name: string };
   payee: string;
   amount: number;
   payMethod: string;
   createdAt: Date;
-  icon: Buffer;
 };
 
 const ExpenseSchema = new Schema(
   {
     details: String,
-    category: String,
+    category: { type: Schema.Types.ObjectId, ref: "Category" },
     payee: String,
     amount: Number,
     payMethod: String,
-    icon: Buffer,
   },
   { timestamps: true }
 );
-const ExpensesModel = models.Expenses || model("Expenses", ExpenseSchema);
-export default ExpensesModel;
+const Expense = models.Expense || model("Expense", ExpenseSchema);
+export default Expense;
 // import mongoose, { model, models, Schema } from "mongoose";
 
 // export type IExpense = {

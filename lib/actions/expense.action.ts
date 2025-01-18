@@ -1,15 +1,14 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import ExpensesModel from "../models/expense.model";
 import { connectToDB } from "../database/db";
-import fs from "fs";
-const path = require("path");
+import Category from "../models/category.model";
+import Expense from "../models/expense.model";
 
 type createExpenseParams = {
   expense: {
     details: string;
-    category: string;
+    categoryId: string;
     payee: string;
     amount: number;
     payMethod: string;
@@ -21,9 +20,17 @@ export async function createExpense({ expense, path }: createExpenseParams) {
   try {
     await connectToDB();
 
-    const newExpense = await ExpensesModel.create({
+    const newExpense = await Expense.create({
       ...expense,
+      category: expense.categoryId,
     });
+
+    const category = await Category.findById(expense.categoryId);
+
+    if (category) {
+      category.expenses.push(newExpense._id);
+      await category.save();
+    }
 
     revalidatePath(path);
     return JSON.parse(JSON.stringify(newExpense));
@@ -36,7 +43,7 @@ export async function createExpense({ expense, path }: createExpenseParams) {
 export const getAllExpenses = async () => {
   try {
     await connectToDB();
-    const expenses = await ExpensesModel.find();
+    const expenses = await Expense.find().populate("category", "name");
     return JSON.parse(JSON.stringify(expenses));
   } catch (error) {
     console.error(error);

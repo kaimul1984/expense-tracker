@@ -130,7 +130,14 @@ const invoices = [
 
 export default async function Expenses() {
   const expenses: IExpense[] = await getAllExpenses();
-
+  // console.log("items", expenses);
+  // const totalExpense = expenses.map((cat) => cat.amount);
+  // const initialValue = 0;
+  // const sum = totalExpense.reduce(
+  //   (accumulator, currentValue) => accumulator + currentValue,
+  //   initialValue
+  // );
+  //console.log("totlal", sum);
   return (
     <div className="p-8 w-full">
       <Dialog>
@@ -148,17 +155,18 @@ export default async function Expenses() {
         </div>
         <DialogContent className="max-w-[420px] lg:max-w-[1000px]">
           <DialogHeader>
-            <DialogTitle>Edit profile</DialogTitle>
+            <DialogTitle>Add expenses</DialogTitle>
             <DialogDescription>
-              Make changes to your profile here. Click save when you're done.
+              Add your daily expenses in the database. Click submit when you're
+              done.
             </DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">
             <FormComponent />
           </div>
-          <DialogFooter>
+          {/* <DialogFooter>
             <Button type="submit">Save changes</Button>
-          </DialogFooter>
+          </DialogFooter> */}
         </DialogContent>
       </Dialog>
       <Table className="border-2 border-collapse">
@@ -174,17 +182,17 @@ export default async function Expenses() {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {invoices.map((item) => (
+          {expenses.map((item) => (
             <TableRow key={item._id}>
               <TableCell className="font-medium">
-                {/* {format(parseISO(item.createdAt.toString()), "dd LLL, yyyy")} */}
-                {item.date}
+                {format(parseISO(item.createdAt.toString()), "dd LLL, yyyy")}
+                {/* {item.date} */}
               </TableCell>
               <TableCell className="font-medium capitalize">
                 {item.details}
               </TableCell>
               <TableCell className="font-medium capitalize">
-                {item.category}
+                {item.category && item.category.name}
               </TableCell>
               <TableCell className="capitalize">{item.payee}</TableCell>
               <TableCell>${item.amount}</TableCell>
