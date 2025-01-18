@@ -71,9 +71,9 @@ export default function RecentTransaction() {
         <FaDollarSign />
       </div>
       <div className="flex flex-col space-y-4">
-        {items.map((item) => (
+        {items.map((item, index) => (
           <SingleTransaction
-            key={item.date}
+            key={`${item.title}` + `${index}`}
             icon1={item.icon1}
             icon2={item.icon2}
             title={item.title}
