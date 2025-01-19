@@ -127,7 +127,7 @@ const invoices = [
 
 export default async function Expenses() {
   const expenses: IExpense[] = await getAllExpenses();
-  console.log("items", expenses);
+  //console.log("items", expenses);
   // const totalExpense = expenses.map((cat) => cat.amount);
   // const initialValue = 0;
   // const sum = totalExpense.reduce(
