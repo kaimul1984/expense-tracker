@@ -9,6 +9,7 @@ export type ICategory = {
 
 const CategorySchema = new Schema(
   {
+    user: { type: Schema.Types.ObjectId, ref: "User", required: true }, // Link to User
     name: { type: String, required: true, unique: false },
     expenses: [
       {

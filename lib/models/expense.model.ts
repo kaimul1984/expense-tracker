@@ -1,4 +1,4 @@
-import mongoose, { Date, model, models, Schema } from "mongoose";
+import { Date, model, models, Schema } from "mongoose";
 
 export type IExpense = {
   _id: string;
@@ -12,11 +12,16 @@ export type IExpense = {
 
 const ExpenseSchema = new Schema(
   {
-    details: String,
-    category: { type: Schema.Types.ObjectId, ref: "Category" },
-    payee: String,
-    amount: Number,
-    payMethod: String,
+    user: { type: Schema.Types.ObjectId, ref: "User", required: true }, // Link to User
+    details: { type: String, required: true },
+    category: { type: Schema.Types.ObjectId, ref: "Category", required: true },
+    payee: { type: String },
+    amount: { type: Number, required: true, min: 0 },
+    payMethod: {
+      type: String,
+      required: true,
+      enum: ["Cash", "Credit Card", "Bank Transfer"],
+    },
   },
   { timestamps: true }
 );

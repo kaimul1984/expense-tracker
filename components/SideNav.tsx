@@ -1,11 +1,11 @@
-import Link from "next/link";
 import Logo from "./Logo";
 import NavLinks from "./NavLinks";
 import { FaSignOutAlt } from "react-icons/fa";
 import { CiSettings } from "react-icons/ci";
-import { SignOutButton } from "@clerk/nextjs";
+import { SignedIn, SignOutButton } from "@clerk/nextjs";
 import { UserButton } from "@clerk/nextjs";
 import { auth, currentUser } from "@clerk/nextjs/server";
+import Link from "next/link";
 import Image from "next/image";
 
 export default async function SideNav() {
@@ -29,31 +29,45 @@ export default async function SideNav() {
             <CiSettings />
             Account
           </span>
-          <div className="flex items-center gap-4">
-            {/* <UserButton /> */}
-            {user && (
-              <Image
-                src={user.imageUrl}
-                alt="profileImg"
-                width={30}
-                height={30}
-                className="rounded-full"
-              />
-            )}
-            {user && (
-              <span className="text-sm text-white">
-                {user?.primaryEmailAddress?.emailAddress}
-              </span>
-            )}
-          </div>
-          <SignOutButton>
+
+          {/* <SignOutButton>
             <button className="flex items-center gap-4 text-white">
               <FaSignOutAlt className="w-6" />
               Sign out
             </button>
-          </SignOutButton>
+          </SignOutButton> */}
+          <SignedIn>
+            <div className="flex gap-4 items-center">
+              <UserButton />
+              {user && (
+                <span className="text-sm text-white">
+                  {user?.primaryEmailAddress?.emailAddress}
+                </span>
+              )}
+            </div>
+          </SignedIn>
         </div>
       </div>
     </div>
   );
+}
+
+{
+  /* <div className="flex items-center gap-4">
+
+{user && (
+  <Image
+    src={user.imageUrl}
+    alt="profileImg"
+    width={30}
+    height={30}
+    className="rounded-full"
+  />
+)}
+{user && (
+  <span className="text-sm text-white">
+    {user?.primaryEmailAddress?.emailAddress}
+  </span>
+)}
+</div>  */
 }

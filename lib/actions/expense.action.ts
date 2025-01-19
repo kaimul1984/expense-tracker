@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { connectToDB } from "../database/db";
 import Category from "../models/category.model";
 import Expense from "../models/expense.model";
+import { currentUser } from "@clerk/nextjs/server";
 
 type createExpenseParams = {
   expense: {
@@ -17,15 +18,28 @@ type createExpenseParams = {
 };
 
 export async function createExpense({ expense, path }: createExpenseParams) {
+  const user = await currentUser();
+
+  if (!user) {
+    throw new Error("user not authincated");
+  }
+
+  const userId = user.id;
+
   try {
     await connectToDB();
+
+    const category = await Category.findById(expense.categoryId);
+
+    if (!category) {
+      throw new Error("category not founded under this user");
+    }
 
     const newExpense = await Expense.create({
       ...expense,
       category: expense.categoryId,
+      user: userId,
     });
-
-    const category = await Category.findById(expense.categoryId);
 
     if (category) {
       category.expenses.push(newExpense._id);
@@ -36,16 +50,28 @@ export async function createExpense({ expense, path }: createExpenseParams) {
     return JSON.parse(JSON.stringify(newExpense));
   } catch (error) {
     console.log(error);
+    throw new Error("Failed to create expense.");
   }
 }
 
 // get request
 export const getAllExpenses = async () => {
+  const user = await currentUser();
+
+  if (!user) {
+    throw new Error("user not authincated");
+  }
+
+  const userId = user.id;
   try {
     await connectToDB();
-    const expenses = await Expense.find().populate("category", "name");
+    const expenses = await Expense.find({ user: userId }).populate(
+      "category",
+      "name"
+    );
     return JSON.parse(JSON.stringify(expenses));
   } catch (error) {
     console.error(error);
+    throw new Error("Failed to fetch expenses.");
   }
 };
