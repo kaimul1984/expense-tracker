@@ -144,8 +144,8 @@ export default async function Categories() {
                 <div className="flex items-center gap-2 justify-center">
                   <FaPlus />
                   <span className="text-blue-600 text-xl font-bold">
-                    {item.expenses.map((i) => (
-                      <span>{i.length}</span>
+                    {item.expenses.map((i, index) => (
+                      <span key={index}>{i.length}</span>
                     ))}
                   </span>
                 </div>

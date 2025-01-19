@@ -11,8 +11,9 @@ import Category from "@/components/Category";
 import RecentIncomes from "@/components/RecentIncomes";
 import RecentExpenses from "@/components/RecentExpenses";
 import RecentTransaction from "@/components/RecentTransactions";
+import { auth, currentUser } from "@clerk/nextjs/server";
 
-export default function Dashboard() {
+export default async function Dashboard() {
   return (
     <section className="w-full">
       <div className="w-full p-2  flex items-center justify-between rounded-xl bg-white shadow-xl mb-8">

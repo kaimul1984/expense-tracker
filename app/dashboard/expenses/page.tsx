@@ -4,9 +4,7 @@ import React from "react";
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
-  TableFooter,
   TableHead,
   TableHeader,
   TableRow,
@@ -16,7 +14,6 @@ import {
   Dialog,
   DialogContent,
   DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -130,7 +127,7 @@ const invoices = [
 
 export default async function Expenses() {
   const expenses: IExpense[] = await getAllExpenses();
-  // console.log("items", expenses);
+  console.log("items", expenses);
   // const totalExpense = expenses.map((cat) => cat.amount);
   // const initialValue = 0;
   // const sum = totalExpense.reduce(
@@ -157,8 +154,8 @@ export default async function Expenses() {
           <DialogHeader>
             <DialogTitle>Add expenses</DialogTitle>
             <DialogDescription>
-              Add your daily expenses in the database. Click submit when you're
-              done.
+              Add your daily expenses in the database. Click submit when
+              you&apos;re done.
             </DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">
