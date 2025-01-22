@@ -13,17 +13,14 @@ type CreateIncomeProps = {
     payMethod: string;
   };
   path: string;
+  userId: string;
 };
 
-export async function createIncome({ income, path }: CreateIncomeProps) {
-  const user = await currentUser();
-
-  if (!user) {
-    throw new Error("user not authenticated");
-  }
-
-  const userId = user.id;
-
+export async function createIncome({
+  income,
+  path,
+  userId,
+}: CreateIncomeProps) {
   try {
     await connectToDB();
     const newIncomes = await Income.create({
@@ -38,3 +35,18 @@ export async function createIncome({ income, path }: CreateIncomeProps) {
     throw new Error("Failed to create income.");
   }
 }
+
+//get income
+
+export const getAllIncomes = async (userId: string) => {
+  try {
+    await connectToDB();
+
+    const incomes = await Income.find({ user: userId });
+
+    return JSON.parse(JSON.stringify(incomes));
+  } catch (error) {
+    console.error(error);
+    throw new Error("Failed to fetch incomes.");
+  }
+};

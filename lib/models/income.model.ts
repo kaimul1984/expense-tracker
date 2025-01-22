@@ -9,18 +9,16 @@ export type IIncome = {
 
 const IncomeSchema = new Schema(
   {
-    user: { type: Schema.Types.ObjectId, ref: "User", required: true }, // Link to User
+    user: { type: String, required: true }, // Link to User
     employer: { type: String, required: true },
     type: {
       type: String,
       required: true,
-      enum: ["Salary", "Freelance", "Other"],
     },
     amount: { type: Number, required: true, min: 0 },
     payMethod: {
       type: String,
       required: true,
-      enum: ["Cash", "Credit Card", "Bank Transfer"],
     },
   },
   { timestamps: true }

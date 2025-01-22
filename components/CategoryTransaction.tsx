@@ -8,6 +8,7 @@ import {
   MdOutlineRestaurant,
 } from "react-icons/md";
 import SingleTransaction from "./SingleTransaction";
+import { getCategoriesByName } from "@/lib/actions/category.action";
 
 const data = [
   {
@@ -125,7 +126,7 @@ const items = [
   },
 ];
 
-export default function CategoryTransaction() {
+export default async function CategoryTransaction() {
   return (
     <div className=" w-full flex flex-col bg-white shadow-2x ">
       <h3 className="bg-slate-600 p-2 text-white">Transaction History</h3>

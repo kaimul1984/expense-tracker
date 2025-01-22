@@ -27,8 +27,12 @@ import Image from "next/image";
 import RecentExpenses from "@/components/RecentExpenses";
 import CategoryTransaction from "@/components/CategoryTransaction";
 import { CategoryForm } from "@/components/CategoryForm";
-import { getAllCategories } from "@/lib/actions/category.action";
+import {
+  getAllCategories,
+  getCategoriesByName,
+} from "@/lib/actions/category.action";
 import { ICategory } from "@/lib/models/category.model";
+import Categoryname from "@/components/Categoryname";
 
 const items = [
   {
@@ -91,7 +95,7 @@ type Props = {
 
 export default async function Categories() {
   const categories: ICategory[] = await getAllCategories();
-  console.log(categories);
+
   return (
     <div className="w-full min-h-40 ">
       <div className="flex justify-between gap-4">
@@ -130,16 +134,18 @@ export default async function Categories() {
           </Dialog>
           {/* category box */}
           <div className="flex items-center justify-center flex-wrap gap-4 mt-8 py-4">
-            {categories.map((item) => (
+            {/* {categories.map((item) => (
               <div
                 key={item._id}
                 className="odd:bg-blue-200 even:bg-teal-200 p-4 flex flex-col gap-2 w-[200px] rounded-md"
               >
                 <div className="flex items-center gap-2">
                   <div className="size-12 rounded-full flex items-center justify-center bg-slate-100">
-                    {/* {item.icon1} */}
+                   
                   </div>
-                  <p className="font-bold text-[1.2rem]">{item.name}</p>
+                  <p className="font-bold text-[1.2rem] capitalize">
+                    {item.name}
+                  </p>
                 </div>
                 <div className="flex items-center gap-2 justify-center">
                   <FaPlus />
@@ -150,7 +156,8 @@ export default async function Categories() {
                   </span>
                 </div>
               </div>
-            ))}
+            ))} */}
+            <Categoryname />
           </div>
           {/* bar chart */}
 

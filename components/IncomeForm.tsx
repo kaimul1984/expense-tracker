@@ -24,7 +24,12 @@ const formSchema = z.object({
   payMethod: z.string(),
   amount: z.coerce.number().min(0.1),
 });
-export function IncomeForm() {
+
+type IncomeFormProps = {
+  userId: string;
+};
+
+export function IncomeForm({ userId }: IncomeFormProps) {
   const router = useRouter();
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
@@ -46,6 +51,7 @@ export function IncomeForm() {
       const newIncomes = await createIncome({
         income: { ...values },
         path: "/dashboard/incomes",
+        userId,
       });
       if (newIncomes) {
         form.reset();

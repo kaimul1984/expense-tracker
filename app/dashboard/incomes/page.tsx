@@ -21,6 +21,19 @@ import {
 import { Pencil, Plus } from "lucide-react";
 import React from "react";
 import { DeleteBtn } from "@/components/DeleteBtn";
+import { currentUser } from "@clerk/nextjs/server";
+import { getAllIncomes } from "@/lib/actions/income.action";
+import { Date } from "mongoose";
+import { format, parseISO } from "date-fns";
+
+type IncomeProps = {
+  _id: string;
+  createdAt: Date;
+  employer: string;
+  type: string;
+  amount: number;
+  payMethod: string;
+};
 
 const invoices = [
   {
@@ -78,7 +91,13 @@ const invoices = [
   },
 ];
 
-export default function Incomes() {
+export default async function Incomes() {
+  const user = await currentUser();
+
+  const userId = user?.id as string;
+
+  const incomes: IncomeProps[] = await getAllIncomes(userId);
+
   return (
     <div className="p-8 w-full">
       <Dialog>
@@ -103,7 +122,7 @@ export default function Incomes() {
             </DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">
-            <IncomeForm />
+            <IncomeForm userId={userId} />
           </div>
           {/* <DialogFooter>
             <Button type="submit">Save changes</Button>
@@ -122,11 +141,11 @@ export default function Incomes() {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {invoices.map((item) => (
+          {incomes.map((item) => (
             <TableRow key={item._id}>
               <TableCell className="font-medium">
                 {/* {format(parseISO(item.createdAt.toString()), "dd LLL, yyyy")} */}
-                {item.date}
+                {format(parseISO(item.createdAt.toString()), "dd LLL, yyyy")}
               </TableCell>
               <TableCell className="font-medium capitalize">
                 {item.employer}
@@ -136,7 +155,7 @@ export default function Incomes() {
                 {item.type}
               </TableCell>
 
-              <TableCell>{item.amount}</TableCell>
+              <TableCell>${item.amount}</TableCell>
               <TableCell className="capitalize">{item.payMethod}</TableCell>
               <TableCell className="text-right">
                 <form action="" className="flex gap-1 items-end justify-end">

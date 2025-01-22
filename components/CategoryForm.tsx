@@ -20,7 +20,8 @@ import { createCategory } from "@/lib/actions/category.action";
 import { useRouter } from "next/navigation";
 
 const formSchema = z.object({
-  name: z.string().min(2),
+  categoryName: z.string().min(2),
+  iconName: z.string(),
 });
 
 export function CategoryForm() {
@@ -30,7 +31,8 @@ export function CategoryForm() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: "",
+      categoryName: "",
+      iconName: "",
     },
   });
 
@@ -59,30 +61,34 @@ export function CategoryForm() {
         {/* details */}
         <FormField
           control={form.control}
-          name="name"
+          name="categoryName"
           render={({ field }) => (
             <FormItem>
               <FormLabel>CategoryTitle</FormLabel>
               <FormControl>
-                <Input placeholder="Add Title" {...field} />
+                <Input
+                  placeholder="Add Title"
+                  {...field}
+                  className="capitalize"
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
-        {/* <FormField
+        <FormField
           control={form.control}
-          name="icon"
+          name="iconName"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Icon</FormLabel>
               <FormControl>
-                <Input type="file" placeholder="Add icon " {...field} />
+                <Input placeholder="Add category title here " {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
-        /> */}
+        />
 
         <Button type="submit">Submit</Button>
       </form>

@@ -12,70 +12,70 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
-const data = [
-  {
-    name: "Jan",
-    income: 4000,
-    expense: 2400,
-  },
-  {
-    name: "Feb",
-    income: 3000,
-    expense: 1398,
-  },
-  {
-    name: "Mar",
-    income: 2000,
-    expense: 9800,
-  },
-  {
-    name: "Apr",
-    income: 2780,
-    expense: 3908,
-  },
-  {
-    name: "May",
-    income: 1890,
-    expense: 4800,
-  },
-  {
-    name: "Jun",
-    income: 2390,
-    expense: 3800,
-  },
-  {
-    name: "Jul",
-    income: 3490,
-    expense: 4300,
-  },
-  {
-    name: "Aug",
-    income: 4652,
-    expense: 7300,
-  },
-  {
-    name: "Sep",
-    income: 3490,
-    expense: 4300,
-  },
-  {
-    name: "Oct",
-    income: 4890,
-    expense: 5300,
-  },
-  {
-    name: "Nov",
-    income: 3490,
-    expense: 4300,
-  },
-  {
-    name: "Dec",
-    income: 3490,
-    expense: 4300,
-  },
-];
+// const data = [
+//   {
+//     name: "Jan",
+//     income: 4000,
+//     expense: 2400,
+//   },
+//   {
+//     name: "Feb",
+//     income: 3000,
+//     expense: 1398,
+//   },
+//   {
+//     name: "Mar",
+//     income: 2000,
+//     expense: 9800,
+//   },
+//   {
+//     name: "Apr",
+//     income: 2780,
+//     expense: 3908,
+//   },
+//   {
+//     name: "May",
+//     income: 1890,
+//     expense: 4800,
+//   },
+//   {
+//     name: "Jun",
+//     income: 2390,
+//     expense: 3800,
+//   },
+//   {
+//     name: "Jul",
+//     income: 3490,
+//     expense: 4300,
+//   },
+//   {
+//     name: "Aug",
+//     income: 4652,
+//     expense: 7300,
+//   },
+//   {
+//     name: "Sep",
+//     income: 3490,
+//     expense: 4300,
+//   },
+//   {
+//     name: "Oct",
+//     income: 4890,
+//     expense: 5300,
+//   },
+//   {
+//     name: "Nov",
+//     income: 3490,
+//     expense: 4300,
+//   },
+//   {
+//     name: "Dec",
+//     income: 3490,
+//     expense: 4300,
+//   },
+// ];
 
-const FinanceChart = () => {
+const FinanceChart = ({ data }) => {
   return (
     <div className="w-full h-full bg-white rounded-xl p-4 shadow-xl">
       <div className="flex items-center justify-between ">
@@ -86,7 +86,7 @@ const FinanceChart = () => {
         <LineChart width={450} height={300} data={data}>
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis
-            dataKey="name"
+            dataKey="month"
             tick={{ fill: "#0f172a", fontSize: "12" }}
             tickLine={false}
             tickMargin={10}
@@ -104,14 +104,14 @@ const FinanceChart = () => {
           />
           <Line
             type="monotone"
-            dataKey="income"
+            dataKey="incomes"
             stroke="#5eead4"
             strokeWidth={3}
           />
 
           <Line
             type="monotone"
-            dataKey="expense"
+            dataKey="expenses"
             stroke="#93c5fd"
             strokeWidth={3}
           />

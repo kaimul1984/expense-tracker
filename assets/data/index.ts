@@ -24,6 +24,11 @@ const nabItems = [
     path: "/dashboard/categories",
     icon: BiCategoryAlt,
   },
+  {
+    label: "Month",
+    path: "/dashboard/month",
+    icon: BiCategoryAlt,
+  },
 ];
 
 export default nabItems;

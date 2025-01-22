@@ -12,7 +12,7 @@ export type IExpense = {
 
 const ExpenseSchema = new Schema(
   {
-    user: { type: Schema.Types.ObjectId, ref: "User", required: true }, // Link to User
+    user: { type: String, required: true },
     details: { type: String, required: true },
     category: { type: Schema.Types.ObjectId, ref: "Category", required: true },
     payee: { type: String },
@@ -20,7 +20,6 @@ const ExpenseSchema = new Schema(
     payMethod: {
       type: String,
       required: true,
-      enum: ["Cash", "Credit Card", "Bank Transfer"],
     },
   },
   { timestamps: true }
