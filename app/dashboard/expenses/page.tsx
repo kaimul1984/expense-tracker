@@ -26,6 +26,8 @@ import { IExpense } from "@/lib/models/expense.model";
 import { getAllExpenses } from "@/lib/actions/expense.action";
 import { format, parseISO } from "date-fns";
 import PaginationBtn from "@/components/Pagination";
+import IconComponent from "@/components/IconComponent";
+import { IconKey } from "@/lib/icon-mapping";
 
 const invoices = [
   {
@@ -185,11 +187,12 @@ export default async function Expenses() {
                 {format(parseISO(item.createdAt.toString()), "dd LLL, yyyy")}
                 {/* {item.date} */}
               </TableCell>
-              <TableCell className="font-medium capitalize">
+              <TableCell className="font-medium capitalize flex gap-2 items-center">
+                <IconComponent category={item.category} />
                 {item.details}
               </TableCell>
               <TableCell className="font-medium capitalize">
-                {item.category && item.category.name}
+                {item.category && item.category.categoryName}
               </TableCell>
               <TableCell className="capitalize">{item.payee}</TableCell>
               <TableCell>${item.amount}</TableCell>

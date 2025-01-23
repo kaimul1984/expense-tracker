@@ -7,6 +7,18 @@ import Category from "../models/category.model";
 import Expense from "../models/expense.model";
 import { currentUser } from "@clerk/nextjs/server";
 import { IconKey } from "../icon-mapping";
+import { Icon } from "next/dist/lib/metadata/types/metadata-types";
+
+function slugify(str: string) {
+  return str
+    .toString()
+    .toLowerCase()
+    .trim() // Remove whitespace from both ends of a string
+    .replace(/\s+/g, "-") // Replace spaces with -
+    .replace(/&/g, "-and-") // Replace & with 'and'
+    .replace(/[^\w\-]+/g, "") // Remove all non-word characters except for -
+    .replace(/\-\-+/g, "-"); // Replace multiple - with single -
+}
 
 type CategoryFormParams = {
   category: {
@@ -15,8 +27,17 @@ type CategoryFormParams = {
   };
   path: string;
 };
+type UpdateFormParams = {
+  category: {
+    _id: string;
+    categoryName: string;
+    iconName: string;
+  };
+  path: string;
+};
 
 export async function createCategory({ category, path }: CategoryFormParams) {
+  //console.log("category", category);
   const user = await currentUser();
 
   if (!user) {
@@ -30,6 +51,7 @@ export async function createCategory({ category, path }: CategoryFormParams) {
     const newCategory = await Category.create({
       ...category,
       user: userId,
+      slug: slugify(category.categoryName),
     });
     revalidatePath(path);
 
@@ -39,7 +61,7 @@ export async function createCategory({ category, path }: CategoryFormParams) {
   }
 }
 
-// get request
+// // get request
 export const getAllCategories = async () => {
   const user = await currentUser();
 
@@ -70,32 +92,32 @@ export const getAllCategories = async () => {
 
 //get categories by name
 
-export const getCategoriesByName = async (name: string) => {
-  const user = await currentUser();
+// export const getCategoriesByName = async (name: string) => {
+//   const user = await currentUser();
 
-  if (!user) {
-    throw new Error("user not authincated");
-  }
+//   if (!user) {
+//     throw new Error("user not authincated");
+//   }
 
-  const userId = user.id;
+//   const userId = user.id;
 
-  try {
-    await connectToDB();
-    const categoryName = await Category.findOne({ user: userId })
-      .where({ name: name })
-      .populate({
-        path: "expenses",
-        model: Expense,
-      });
-    if (!categoryName) {
-      throw new Error("categoryname not found");
-    }
-    return JSON.parse(JSON.stringify(categoryName));
-  } catch (error) {
-    console.log(error);
-    throw new Error("Failed to fetch categoriesName.");
-  }
-};
+//   try {
+//     await connectToDB();
+//     const categoryName = await Category.findOne({ user: userId })
+//       .where({ name: name })
+//       .populate({
+//         path: "expenses",
+//         model: Expense,
+//       });
+//     if (!categoryName) {
+//       throw new Error("categoryname not found");
+//     }
+//     return JSON.parse(JSON.stringify(categoryName));
+//   } catch (error) {
+//     console.log(error);
+//     throw new Error("Failed to fetch categoriesName.");
+//   }
+// };
 
 export const getAllCategoriesName = async (year: number, month: number) => {
   const user = await currentUser();
@@ -114,7 +136,7 @@ export const getAllCategoriesName = async (year: number, month: number) => {
 
     // Fetch categories and dynamically calculate total expenses for the month
     const categories = await Category.find({ user: userId })
-      .sort({ createdAt: -1 })
+      .sort({ createdAt: 1 })
       .populate({
         path: "expenses",
         model: Expense,
@@ -135,6 +157,7 @@ export const getAllCategoriesName = async (year: number, month: number) => {
       _id: category._id.toString(), // Serialize MongoDB ObjectId
       user: category.user,
       categoryName: category.categoryName,
+      slug: category.slug,
       iconName: category.iconName,
       createdAt: category.createdAt.toISOString(),
       updatedAt: category.updatedAt.toISOString(),
@@ -157,3 +180,18 @@ export const getAllCategoriesName = async (year: number, month: number) => {
     throw new Error("Failed to fetch categories.");
   }
 };
+
+// update
+export async function updateCategory({ category, path }: UpdateFormParams) {
+  try {
+    await connectToDB();
+  } catch (error) {}
+}
+
+//delete
+
+export async function deleteCategory() {
+  try {
+    await connectToDB();
+  } catch (error) {}
+}

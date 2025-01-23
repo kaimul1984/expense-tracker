@@ -26,7 +26,7 @@ const Categoryname = () => {
     fetchMonthlyData();
   }, []);
 
-  //console.log(categories)
+  console.log(categories);
 
   return (
     <div className="w-full flex flex-col space-y-6">

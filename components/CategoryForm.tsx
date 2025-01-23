@@ -24,6 +24,11 @@ const formSchema = z.object({
   iconName: z.string(),
 });
 
+const categoryDefaultValues = {
+  categoryName: "",
+  iconName: "",
+};
+
 export function CategoryForm() {
   const router = useRouter();
 
@@ -83,7 +88,10 @@ export function CategoryForm() {
             <FormItem>
               <FormLabel>Icon</FormLabel>
               <FormControl>
-                <Input placeholder="Add category title here " {...field} />
+                <Input
+                  placeholder="Add category title here. First letter Capital "
+                  {...field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>

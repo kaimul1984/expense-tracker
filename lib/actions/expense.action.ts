@@ -65,10 +65,10 @@ export const getAllExpenses = async () => {
   const userId = user.id;
   try {
     await connectToDB();
-    const expenses = await Expense.find({ user: userId }).populate(
-      "category",
-      "name"
-    );
+    const expenses = await Expense.find({ user: userId }).populate({
+      path: "category",
+      select: "_id categoryName iconName",
+    });
     return JSON.parse(JSON.stringify(expenses));
   } catch (error) {
     console.error(error);

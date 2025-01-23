@@ -15,8 +15,9 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { createIncome } from "@/lib/actions/income.action";
+import { createIncome, updateIncomes } from "@/lib/actions/income.action";
 import { useRouter } from "next/navigation";
+import IncomeDropdown from "./IncomeDropdown";
 
 const formSchema = z.object({
   employer: z.string().min(2),
@@ -25,98 +26,163 @@ const formSchema = z.object({
   amount: z.coerce.number().min(0.1),
 });
 
-type IncomeFormProps = {
-  userId: string;
+type IncomeProps = {
+  employer: string;
+  type: string;
+  payMethod: string;
+  amount: number;
 };
 
-export function IncomeForm({ userId }: IncomeFormProps) {
+type IncomeFormProps = {
+  userId: string;
+  type: "create" | "update";
+  income?: IncomeProps;
+  incomeId?: string;
+};
+
+const defaultIncomes = {
+  employer: "",
+  type: "",
+  payMethod: "",
+  amount: 0.1,
+};
+
+export function IncomeForm({
+  userId,
+  type,
+  income,
+  incomeId,
+}: IncomeFormProps) {
   const router = useRouter();
+  const initialValues =
+    income && type === "update" ? { ...income } : defaultIncomes;
+
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      employer: "",
-      type: "",
-      payMethod: "",
-      amount: 0.1,
-    },
+    defaultValues: initialValues,
   });
 
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values);
-    try {
-      const newIncomes = await createIncome({
-        income: { ...values },
-        path: "/dashboard/incomes",
-        userId,
-      });
-      if (newIncomes) {
-        form.reset();
-        router.push("/dashboard/incomes");
+    // create
+
+    if (type === "create") {
+      try {
+        const newIncomes = await createIncome({
+          income: { ...values },
+          path: "/dashboard/incomes",
+          userId,
+        });
+        if (newIncomes) {
+          form.reset();
+          router.push("/dashboard/incomes");
+        }
+      } catch (error) {
+        console.error(error);
       }
-    } catch (error) {
-      console.error(error);
+    }
+
+    // update
+    if (type === "update") {
+      if (!incomeId) {
+        router.back();
+        return;
+      }
+
+      try {
+        const updatedIncome = await updateIncomes({
+          income: { ...values, _id: incomeId },
+          path: `/dashboard/incomes/${incomeId}`,
+          userId,
+        });
+
+        if (updatedIncome) {
+          form.reset();
+          router.push("/dashboard/incomes");
+        }
+      } catch (error) {
+        console.error(error);
+      }
     }
   }
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-        <FormField
-          control={form.control}
-          name="employer"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Employer</FormLabel>
-              <FormControl>
-                <Input placeholder="Employer name" {...field} />
-              </FormControl>
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="type"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Type</FormLabel>
-              <FormControl>
-                <Input placeholder="Type of your Income" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="amount"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Amount</FormLabel>
-              <FormControl>
-                <Input placeholder="Add amount" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="payMethod"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Pay Method</FormLabel>
-              <FormControl>
-                <Input placeholder="Pay method" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <Button type="submit">Submit</Button>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 ">
+        <div className="w-full flex flex-wrap gap-8">
+          <div className="w-[45%]">
+            <FormField
+              control={form.control}
+              name="employer"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Employer</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Employer name" {...field} />
+                  </FormControl>
+                </FormItem>
+              )}
+            />
+          </div>
+          <div className="w-[45%]">
+            <FormField
+              control={form.control}
+              name="type"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Type</FormLabel>
+                  <FormControl>
+                    {/* <Input placeholder="Type of your Income" {...field} /> */}
+                    <IncomeDropdown
+                      onChangeHandler={field.onChange}
+                      value={field.value}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+          <div className="w-[45%]">
+            <FormField
+              control={form.control}
+              name="amount"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Amount</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Add amount" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+          <div className="w-[45%]">
+            <FormField
+              control={form.control}
+              name="payMethod"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Receive Method</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Receive method" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+        </div>
+        <div className="flex items-center gap-4">
+          <Button type="submit">
+            {type === "create" ? "Submit" : "Update"}
+          </Button>
+          <Button onClick={() => router.back()} className="bg-red-400">
+            {type === "update" ? "Cancel" : ""}
+          </Button>
+        </div>
       </form>
     </Form>
   );

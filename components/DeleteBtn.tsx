@@ -1,3 +1,4 @@
+"use client";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -10,14 +11,20 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
+import { deleteEvent } from "@/lib/actions/income.action";
 import { Delete, Trash2 } from "lucide-react";
+import { usePathname } from "next/navigation";
+import { useTransition } from "react";
 
-export function DeleteBtn() {
+export function DeleteBtn({ incomeId }: { incomeId: string }) {
+  const pathname = usePathname();
+  let [isPending, startTransition] = useTransition();
+
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
-        <Button className="rounded-md bg-red-200 ">
-          <Trash2 color="#000" size={20} />
+        <Button className="rounded-md bg-red-100 text-red-600 hover:text-white">
+          <Trash2 size={20} />
         </Button>
       </AlertDialogTrigger>
       <AlertDialogContent>
@@ -30,7 +37,16 @@ export function DeleteBtn() {
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction className="bg-red-500">Confirm</AlertDialogAction>
+          <AlertDialogAction
+            className="bg-red-500 "
+            onClick={() =>
+              startTransition(async () => {
+                await deleteEvent({ incomeId, path: pathname });
+              })
+            }
+          >
+            {isPending ? "Deleting..." : "Delete"}
+          </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

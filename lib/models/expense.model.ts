@@ -3,7 +3,7 @@ import { Date, model, models, Schema } from "mongoose";
 export type IExpense = {
   _id: string;
   details: string;
-  category: { _id: string; name: string };
+  category: { _id: string; categoryName: string; iconName: string };
   payee: string;
   amount: number;
   payMethod: string;

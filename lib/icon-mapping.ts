@@ -11,11 +11,11 @@ import {
   FaTheaterMasks,
   FaGift,
   FaGraduationCap,
-  FaEllipsisH,
 } from "react-icons/fa";
 import { GiReceiveMoney, GiPayMoney } from "react-icons/gi";
 import { IoCardOutline, IoPencilOutline } from "react-icons/io5";
 import { BsPiggyBank, BsGraphUp } from "react-icons/bs";
+import { AiOutlineDollarCircle } from "react-icons/ai";
 
 type IconKey =
   | "Ticket"
@@ -28,7 +28,7 @@ type IconKey =
   | "Entertainments"
   | "GiftDonations"
   | "Education"
-  | "Others"
+  | "Miscellaneous"
   | "GiReceiveMoney"
   | "GiPayMoney"
   | "IoCardOutline"
@@ -47,7 +47,7 @@ const iconMapping: { [key in IconKey]: any } = {
   Entertainments: FaTheaterMasks,
   GiftDonations: FaGift,
   Education: FaGraduationCap,
-  Others: FaEllipsisH,
+  Miscellaneous: AiOutlineDollarCircle,
   GiReceiveMoney: GiReceiveMoney,
   GiPayMoney: GiPayMoney,
   IoCardOutline: IoCardOutline,

@@ -3,14 +3,17 @@ import { Schema } from "mongoose";
 
 export type ICategory = {
   _id: string;
-  name: string;
+  categoryName: string;
+  slug: string;
+  iconName: string;
   expenses: string[];
 };
 
 const CategorySchema = new Schema(
   {
     user: { type: String, required: true },
-    name: { type: String, required: true, unique: false },
+    categoryName: { type: String, required: true, unique: false },
+    slug: { type: String, unique: true },
     iconName: { type: String },
     expenses: [
       {

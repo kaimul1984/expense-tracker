@@ -25,6 +25,7 @@ import { currentUser } from "@clerk/nextjs/server";
 import { getAllIncomes } from "@/lib/actions/income.action";
 import { Date } from "mongoose";
 import { format, parseISO } from "date-fns";
+import Link from "next/link";
 
 type IncomeProps = {
   _id: string;
@@ -117,12 +118,11 @@ export default async function Incomes() {
           <DialogHeader>
             <DialogTitle>Add Income</DialogTitle>
             <DialogDescription>
-              Add your daily expenses in the database. Click submit when you're
-              done.
+              Add your Incomes in the database. Click submit when you're done.
             </DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">
-            <IncomeForm userId={userId} />
+            <IncomeForm userId={userId} type="create" />
           </div>
           {/* <DialogFooter>
             <Button type="submit">Save changes</Button>
@@ -134,9 +134,9 @@ export default async function Incomes() {
           <TableRow>
             <TableHead>Date</TableHead>
             <TableHead>Employer</TableHead>
-            <TableHead>Type</TableHead>
+            <TableHead> Income Type</TableHead>
             <TableHead>Amount</TableHead>
-            <TableHead>Pay Method</TableHead>
+            <TableHead>Receive Method</TableHead>
             <TableHead className="text-right">Action</TableHead>
           </TableRow>
         </TableHeader>
@@ -157,15 +157,16 @@ export default async function Incomes() {
 
               <TableCell>${item.amount}</TableCell>
               <TableCell className="capitalize">{item.payMethod}</TableCell>
-              <TableCell className="text-right">
-                <form action="" className="flex gap-1 items-end justify-end">
-                  <Button className="rounded-md bg-blue-200 ">
-                    <Pencil color="#000" size={20} />
-                  </Button>
+              <TableCell className="text-right flex gap-1 items-end justify-end">
+                <Link
+                  href={`/dashboard/incomes/${item._id}`}
+                  className="rounded-md bg-blue-200 py-[10px] px-3 hover:bg-blue-950 hover:text-white "
+                >
+                  <Pencil size={20} />
+                </Link>
 
-                  {/* <button className="rounded-md bg-red-700 p-1">Delete</button> */}
-                  <DeleteBtn />
-                </form>
+                {/* <button className="rounded-md bg-red-700 p-1">Delete</button> */}
+                <DeleteBtn incomeId={item._id} />
               </TableCell>
             </TableRow>
           ))}

@@ -15,6 +15,17 @@ type CreateIncomeProps = {
   path: string;
   userId: string;
 };
+type UpdateIncomeProps = {
+  income: {
+    _id: string;
+    employer: string;
+    type: string;
+    amount: number;
+    payMethod: string;
+  };
+  path: string;
+  userId: string;
+};
 
 export async function createIncome({
   income,
@@ -50,3 +61,60 @@ export const getAllIncomes = async (userId: string) => {
     throw new Error("Failed to fetch incomes.");
   }
 };
+
+export async function getIncomeById(id: string) {
+  try {
+    await connectToDB();
+    const income = await Income.findOne({ _id: id });
+    if (!income) throw new Error("income not found");
+    return JSON.parse(JSON.stringify(income));
+  } catch (error) {
+    console.error(error);
+    throw new Error("Failed to fetch incomes.");
+  }
+}
+
+// update
+
+export const updateIncomes = async ({
+  income,
+  path,
+  userId,
+}: UpdateIncomeProps) => {
+  try {
+    await connectToDB();
+    const updateIncome = await Income.findByIdAndUpdate(
+      income._id,
+      {
+        ...income,
+
+        userId,
+      },
+      { new: true }
+    );
+    revalidatePath(path);
+    return JSON.parse(JSON.stringify(updateIncome));
+  } catch (error) {
+    console.error(error);
+    throw new Error("Failed to fetch incomes.");
+  }
+};
+
+// DELETE
+export async function deleteEvent({
+  incomeId,
+  path,
+}: {
+  incomeId: string;
+  path: string;
+}) {
+  try {
+    await connectToDB();
+
+    const deletedEvent = await Income.findByIdAndDelete(incomeId);
+    if (deletedEvent) revalidatePath(path);
+  } catch (error) {
+    console.error(error);
+    throw new Error("Failed to fetch incomes.");
+  }
+}

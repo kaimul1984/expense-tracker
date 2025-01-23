@@ -16,39 +16,35 @@ type DropdownProps = {
   onChangeHandler?: () => void;
 };
 
-const Dropdown = ({ value, onChangeHandler }: DropdownProps) => {
-  const [categories, setCategories] = useState<ICategory[]>([]);
+const incomesTypes = [
+  { id: "salary", title: "salary" },
+  { id: "bonus", title: "bonus" },
+  { id: "freelance", title: "freelance" },
+  { id: "profit", title: "profit" },
+];
 
-  useEffect(() => {
-    const getCategories = async () => {
-      const categoryList = await getAllCategories();
-
-      categoryList && setCategories(categoryList as ICategory[]);
-    };
-
-    getCategories();
-  }, []);
-
+export default function IncomeDropdown({
+  value,
+  onChangeHandler,
+}: DropdownProps) {
   return (
     <Select onValueChange={onChangeHandler} defaultValue={value}>
       <SelectTrigger className=" border-slate-200 bg-slate-100 placeholder:text-white">
-        <SelectValue placeholder="Category" />
+        <SelectValue placeholder="Income type" />
       </SelectTrigger>
       <SelectContent>
         <SelectGroup>
-          {categories.map((category) => (
+          {incomesTypes.map((category) => (
             <SelectItem
-              key={category._id}
-              value={category._id}
+              key={category.id}
+              value={category.id}
               className="select-item p-regular-14 capitalize"
             >
-              {category.categoryName}
+              {category.title}
             </SelectItem>
           ))}
         </SelectGroup>
       </SelectContent>
     </Select>
   );
-};
-
-export default Dropdown;
+}
