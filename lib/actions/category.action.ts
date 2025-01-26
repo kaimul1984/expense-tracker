@@ -90,34 +90,22 @@ export const getAllCategories = async () => {
   }
 };
 
-//get categories by name
+//get categories by id
 
-// export const getCategoriesByName = async (name: string) => {
-//   const user = await currentUser();
+export const getCategoryById = async (id: string) => {
+  try {
+    await connectToDB();
+    const category = await Category.findOne({ _id: id });
 
-//   if (!user) {
-//     throw new Error("user not authincated");
-//   }
-
-//   const userId = user.id;
-
-//   try {
-//     await connectToDB();
-//     const categoryName = await Category.findOne({ user: userId })
-//       .where({ name: name })
-//       .populate({
-//         path: "expenses",
-//         model: Expense,
-//       });
-//     if (!categoryName) {
-//       throw new Error("categoryname not found");
-//     }
-//     return JSON.parse(JSON.stringify(categoryName));
-//   } catch (error) {
-//     console.log(error);
-//     throw new Error("Failed to fetch categoriesName.");
-//   }
-// };
+    if (!category) {
+      throw new Error("categoryId not found");
+    }
+    return JSON.parse(JSON.stringify(category));
+  } catch (error) {
+    console.log(error);
+    throw new Error("Failed to fetch categoryId.");
+  }
+};
 
 export const getAllCategoriesName = async (year: number, month: number) => {
   const user = await currentUser();
@@ -183,9 +171,26 @@ export const getAllCategoriesName = async (year: number, month: number) => {
 
 // update
 export async function updateCategory({ category, path }: UpdateFormParams) {
+  const user = await currentUser();
+
+  if (!user) {
+    throw new Error("User not authenticated");
+  }
+
+  const userId = user.id;
   try {
     await connectToDB();
-  } catch (error) {}
+    const updateCategory = await Category.findByIdAndUpdate(
+      category._id,
+      { ...category, slug: slugify(category.categoryName), userId },
+      { new: true }
+    );
+    revalidatePath(path);
+    return JSON.parse(JSON.stringify(updateCategory));
+  } catch (error) {
+    console.log(error);
+    throw new Error("Failed to fetch categories.");
+  }
 }
 
 //delete

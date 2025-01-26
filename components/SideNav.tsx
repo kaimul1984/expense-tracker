@@ -7,6 +7,7 @@ import { UserButton } from "@clerk/nextjs";
 import { auth, currentUser } from "@clerk/nextjs/server";
 import Link from "next/link";
 import Image from "next/image";
+import UserBtn from "./UserButton";
 
 export default async function SideNav() {
   const user = await currentUser();
@@ -36,16 +37,10 @@ export default async function SideNav() {
               Sign out
             </button>
           </SignOutButton> */}
-          <SignedIn>
-            <div className="flex gap-4 items-center">
-              <UserButton />
-              {user && (
-                <span className="text-sm text-white">
-                  {user?.primaryEmailAddress?.emailAddress}
-                </span>
-              )}
-            </div>
-          </SignedIn>
+          <div className="flex gap-4 items-center">
+            <UserBtn />
+            {user && <p className="text-sm text-white">{user?.fullName}</p>}
+          </div>
         </div>
       </div>
     </div>

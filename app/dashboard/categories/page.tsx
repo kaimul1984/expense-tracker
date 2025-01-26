@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Suspense } from "react";
 import {
   Dialog,
   DialogContent,
@@ -21,18 +21,14 @@ import {
   MdOutlineLocalGroceryStore,
   MdOutlineRestaurant,
 } from "react-icons/md";
-import Category from "@/components/Category";
+
 import CategoryBarChart from "@/components/CategoryBarChart";
-import Image from "next/image";
-import RecentExpenses from "@/components/RecentExpenses";
+
 import CategoryTransaction from "@/components/CategoryTransaction";
 import { CategoryForm } from "@/components/CategoryForm";
-import {
-  getAllCategories,
-  getCategoriesByName,
-} from "@/lib/actions/category.action";
-import { ICategory } from "@/lib/models/category.model";
+
 import Categoryname from "@/components/Categoryname";
+import Loading from "@/components/Loading";
 
 const items = [
   {
@@ -94,8 +90,6 @@ type Props = {
 };
 
 export default async function Categories() {
-  const categories: ICategory[] = await getAllCategories();
-
   return (
     <div className="w-full min-h-40 ">
       <div className="flex justify-between gap-4">
@@ -125,7 +119,7 @@ export default async function Categories() {
                 </DialogDescription>
               </DialogHeader>
               <div className="grid gap-4 py-4">
-                <CategoryForm />
+                <CategoryForm type="create" />
               </div>
             </DialogContent>
           </Dialog>

@@ -353,3 +353,15 @@ body {
   font-weight: 500;
   max-width: 200px;
 }
+
+.anime{
+  animation: skelaton 1s linear infinite alternate;
+}
+@keyframes skelaton {
+  0% {
+    background-color: hsl(198, 5%, 42%);
+  }
+  100% {
+    background-color: hsl(204, 31%, 52%);
+  }
+}

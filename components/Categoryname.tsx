@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { getAllCategoriesName } from "@/lib/actions/category.action";
 import CategoryCard from "./CategoryCard";
+import Loading from "./Loading";
 
 const Categoryname = () => {
   const [year, setYear] = useState(new Date().getFullYear());
@@ -26,7 +27,7 @@ const Categoryname = () => {
     fetchMonthlyData();
   }, []);
 
-  console.log(categories);
+  // console.log(categories);
 
   return (
     <div className="w-full flex flex-col space-y-6">
@@ -81,9 +82,7 @@ const Categoryname = () => {
             <CategoryCard key={category._id} category={category} />
           ))
         ) : (
-          <p className="w-full bg-neutral-100 p-8 text-center">
-            No category found
-          </p>
+          <Loading />
         )}
       </div>
     </div>

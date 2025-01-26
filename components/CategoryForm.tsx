@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { createExpense } from "@/lib/actions/expense.action";
-import { createCategory } from "@/lib/actions/category.action";
+import { createCategory, updateCategory } from "@/lib/actions/category.action";
 import { useRouter } from "next/navigation";
 
 const formSchema = z.object({
@@ -29,16 +29,31 @@ const categoryDefaultValues = {
   iconName: "",
 };
 
-export function CategoryForm() {
+type Category = {
+  categoryName: string;
+  iconName: string;
+};
+
+type CategoryFormProps = {
+  type: "create" | "update";
+  category?: Category;
+  categoryId?: string;
+};
+
+export function CategoryForm({
+  type,
+  category,
+  categoryId,
+}: CategoryFormProps) {
   const router = useRouter();
+
+  const initialValues =
+    category && type === "update" ? { ...category } : categoryDefaultValues;
 
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      categoryName: "",
-      iconName: "",
-    },
+    defaultValues: initialValues,
   });
 
   // 2. Define a submit handler.
@@ -46,19 +61,45 @@ export function CategoryForm() {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
     console.log(values);
-    try {
-      const newCategory = await createCategory({
-        category: { ...values },
-        path: "/dashboard/categories",
-      });
+    if (type === "create") {
+      try {
+        const newCategory = await createCategory({
+          category: { ...values },
+          path: "/dashboard/categories",
+        });
 
-      if (newCategory) {
-        form.reset();
-        router.push("/dashboard/categories");
+        if (newCategory) {
+          form.reset();
+          router.push("/dashboard/categories");
+        }
+      } catch (error) {
+        console.log(error);
       }
-    } catch (error) {
-      console.log(error);
     }
+    if (type === "update") {
+      if (!categoryId) {
+        router.back();
+        return;
+      }
+
+      try {
+        const udatedCategory = await updateCategory({
+          category: { ...values, _id: categoryId },
+          path: `/dashboard/categories/`,
+        });
+
+        if (udatedCategory) {
+          form.reset();
+          router.back();
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  }
+
+  function onDismiss() {
+    router.back();
   }
   return (
     <Form {...form}>
@@ -98,7 +139,14 @@ export function CategoryForm() {
           )}
         />
 
-        <Button type="submit">Submit</Button>
+        <div className="flex items-center gap-4">
+          <Button type="submit">
+            {type === "create" ? "Submit" : "Update"}
+          </Button>
+          <Button onClick={onDismiss} className="bg-red-400">
+            {type === "update" ? "Cancel" : ""}
+          </Button>
+        </div>
       </form>
     </Form>
   );
