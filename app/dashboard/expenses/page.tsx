@@ -27,116 +27,13 @@ import { getAllExpenses } from "@/lib/actions/expense.action";
 import { format, parseISO } from "date-fns";
 import PaginationBtn from "@/components/Pagination";
 import IconComponent from "@/components/IconComponent";
-import { IconKey } from "@/lib/icon-mapping";
-
-const invoices = [
-  {
-    _id: 1,
-    date: "Mon 02, 2024",
-    details: "vege, grocery, milk",
-    category: "grocery",
-    payee: "Woolworths",
-    amount: "$250.00",
-    payMethod: "Credit Card",
-  },
-
-  {
-    _id: 2,
-    date: "Tue 03, 2024",
-    details: "vege, grocery, milk",
-    category: "grocery",
-    payee: "Woolworths",
-    amount: "$250.00",
-    payMethod: "Credit Card",
-  },
-
-  {
-    _id: 3,
-    date: "Wed 04, 2024",
-    details: "vege, grocery, milk",
-    category: "grocery",
-    payee: "Woolworths",
-    amount: "$250.00",
-    payMethod: "Credit Card",
-  },
-
-  {
-    _id: 4,
-    date: "Mon 03, 2024",
-    details: "vege, grocery, milk",
-    category: "grocery",
-    payee: "Woolworths",
-    amount: "$250.00",
-    payMethod: "Credit Card",
-  },
-
-  {
-    _id: 5,
-    date: "Mon 05, 2024",
-    details: "vege, grocery, milk",
-    category: "grocery",
-    payee: "Woolworths",
-    amount: "$250.00",
-    payMethod: "Credit Card",
-  },
-
-  {
-    _id: 6,
-    date: "Mon 07, 2024",
-    details: "vege, grocery, milk",
-    category: "grocery",
-    payee: "Woolworths",
-    amount: "$250.00",
-    payMethod: "Credit Card",
-  },
-  {
-    _id: 7,
-    date: "Mon 09, 2024",
-    details: "vege, grocery, milk",
-    category: "grocery",
-    payee: "Woolworths",
-    amount: "$250.00",
-    payMethod: "Credit Card",
-  },
-  {
-    _id: 8,
-    date: "Mon 12, 2024",
-    details: "vege, grocery, milk",
-    category: "grocery",
-    payee: "Woolworths",
-    amount: "$250.00",
-    payMethod: "Credit Card",
-  },
-  {
-    _id: 9,
-    date: "Mon 07, 2024",
-    details: "vege, grocery, milk",
-    category: "grocery",
-    payee: "Woolworths",
-    amount: "$250.00",
-    payMethod: "Credit Card",
-  },
-  {
-    _id: 10,
-    date: "Mon 07, 2024",
-    details: "vege, grocery, milk",
-    category: "grocery",
-    payee: "Woolworths",
-    amount: "$250.00",
-    payMethod: "Credit Card",
-  },
-];
+import iconMapping, { IconKey } from "@/lib/icon-mapping";
+import Link from "next/link";
 
 export default async function Expenses() {
   const expenses: IExpense[] = await getAllExpenses();
-  //console.log("items", expenses);
-  // const totalExpense = expenses.map((cat) => cat.amount);
-  // const initialValue = 0;
-  // const sum = totalExpense.reduce(
-  //   (accumulator, currentValue) => accumulator + currentValue,
-  //   initialValue
-  // );
-  //console.log("totlal", sum);
+  const IconUncategorised = iconMapping.Uncategoriesed;
+
   return (
     <div className="p-8 w-full">
       <Dialog>
@@ -181,34 +78,47 @@ export default async function Expenses() {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {expenses.map((item) => (
-            <TableRow key={item._id}>
-              <TableCell className="font-medium">
-                {format(parseISO(item.createdAt.toString()), "dd LLL, yyyy")}
-                {/* {item.date} */}
-              </TableCell>
-              <TableCell className="font-medium capitalize flex gap-2 items-center">
-                <IconComponent category={item.category} />
-                {item.details}
-              </TableCell>
-              <TableCell className="font-medium capitalize">
-                {item.category && item.category.categoryName}
-              </TableCell>
-              <TableCell className="capitalize">{item.payee}</TableCell>
-              <TableCell>${item.amount}</TableCell>
-              <TableCell className="capitalize">{item.payMethod}</TableCell>
-              <TableCell className="text-right">
-                <form action="" className="flex gap-1 items-end justify-end">
-                  <Button className="rounded-md bg-blue-200 ">
+          {expenses.length > 0 ? (
+            expenses.map((item) => (
+              <TableRow key={item._id}>
+                <TableCell className="font-medium">
+                  {format(parseISO(item.createdAt.toString()), "dd LLL, yyyy")}
+                  {/* {item.date} */}
+                </TableCell>
+                <TableCell className="font-medium capitalize flex gap-2 items-center">
+                  {item.category ? (
+                    <IconComponent category={item.category} />
+                  ) : (
+                    <IconUncategorised className="text-2xl" />
+                  )}
+                  {item.details}
+                </TableCell>
+                <TableCell className="font-medium capitalize">
+                  {item.category ? (
+                    item.category.categoryName
+                  ) : (
+                    <p>uncategorised</p>
+                  )}
+                </TableCell>
+                <TableCell className="capitalize">{item.payee}</TableCell>
+                <TableCell>${item.amount}</TableCell>
+                <TableCell className="capitalize">{item.payMethod}</TableCell>
+                <TableCell className="justify-end flex items-center gap-2">
+                  <Link
+                    href={`/dashboard/expenses/${item._id}`}
+                    className="rounded-md bg-blue-200 p-2"
+                  >
                     <Pencil color="#000" size={20} />
-                  </Button>
+                  </Link>
 
                   {/* <button className="rounded-md bg-red-700 p-1">Delete</button> */}
-                  <DeleteBtn />
-                </form>
-              </TableCell>
-            </TableRow>
-          ))}
+                  <DeleteBtn idForDelete={item._id} type="expenses" />
+                </TableCell>
+              </TableRow>
+            ))
+          ) : (
+            <p>no Expenses found</p>
+          )}
         </TableBody>
       </Table>
       <PaginationBtn />

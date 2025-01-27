@@ -195,8 +195,19 @@ export async function updateCategory({ category, path }: UpdateFormParams) {
 
 //delete
 
-export async function deleteCategory() {
+export async function deleteCategory({
+  idForDelete,
+  path,
+}: {
+  idForDelete: string;
+  path: string;
+}) {
   try {
     await connectToDB();
-  } catch (error) {}
+    const deleteCategory = await Category.findByIdAndDelete(idForDelete);
+    if (deleteCategory) revalidatePath(path);
+  } catch (error) {
+    console.error(error);
+    throw new Error("Failed to deleteCategory.");
+  }
 }

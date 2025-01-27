@@ -4,11 +4,13 @@ import { useState, useEffect } from "react";
 import { getAllCategoriesName } from "@/lib/actions/category.action";
 import CategoryCard from "./CategoryCard";
 import Loading from "./Loading";
+import { useRouter } from "next/navigation";
 
 const Categoryname = () => {
   const [year, setYear] = useState(new Date().getFullYear());
   const [month, setMonth] = useState(new Date().getMonth() + 1); // Months are 1-indexed
   const [categories, setCategories] = useState([]);
+  const router = useRouter();
 
   const fetchMonthlyData = async () => {
     try {
@@ -18,6 +20,7 @@ const Categoryname = () => {
       );
 
       setCategories(result);
+      router.refresh();
     } catch (error) {
       console.error("Error fetching monthly data:", error);
     }

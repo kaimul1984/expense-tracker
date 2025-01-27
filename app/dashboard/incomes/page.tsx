@@ -22,7 +22,7 @@ import { Pencil, Plus } from "lucide-react";
 import React from "react";
 import { DeleteBtn } from "@/components/DeleteBtn";
 import { currentUser } from "@clerk/nextjs/server";
-import { getAllIncomes } from "@/lib/actions/income.action";
+import { deleteIncome, getAllIncomes } from "@/lib/actions/income.action";
 import { Date } from "mongoose";
 import { format, parseISO } from "date-fns";
 import Link from "next/link";
@@ -166,7 +166,7 @@ export default async function Incomes() {
                 </Link>
 
                 {/* <button className="rounded-md bg-red-700 p-1">Delete</button> */}
-                <DeleteBtn incomeId={item._id} />
+                <DeleteBtn idForDelete={item._id} type="income" />
               </TableCell>
             </TableRow>
           ))}

@@ -101,18 +101,18 @@ export const updateIncomes = async ({
 };
 
 // DELETE
-export async function deleteEvent({
-  incomeId,
+export async function deleteIncome({
+  idForDelete,
   path,
 }: {
-  incomeId: string;
+  idForDelete: string;
   path: string;
 }) {
   try {
     await connectToDB();
 
-    const deletedEvent = await Income.findByIdAndDelete(incomeId);
-    if (deletedEvent) revalidatePath(path);
+    const deletedIncome = await Income.findByIdAndDelete(idForDelete);
+    if (deletedIncome) revalidatePath(path);
   } catch (error) {
     console.error(error);
     throw new Error("Failed to fetch incomes.");

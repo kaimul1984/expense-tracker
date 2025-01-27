@@ -11,16 +11,6 @@ import {
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import { Input } from "@/components/ui/input";
-import { FaGasPump, FaPlus, FaTicketAlt } from "react-icons/fa";
-import { FaBasketShopping, FaRegCreditCard } from "react-icons/fa6";
-import { GiClothes } from "react-icons/gi";
-import { HiCubeTransparent } from "react-icons/hi";
-import { GrMoney } from "react-icons/gr";
-import { RiMoneyDollarCircleLine } from "react-icons/ri";
-import {
-  MdOutlineLocalGroceryStore,
-  MdOutlineRestaurant,
-} from "react-icons/md";
 
 import CategoryBarChart from "@/components/CategoryBarChart";
 
@@ -28,60 +18,7 @@ import CategoryTransaction from "@/components/CategoryTransaction";
 import { CategoryForm } from "@/components/CategoryForm";
 
 import Categoryname from "@/components/Categoryname";
-import Loading from "@/components/Loading";
-
-const items = [
-  {
-    icon1: <FaGasPump size={20} />,
-    title: "Fuel",
-    amount: 89.0,
-  },
-  {
-    icon1: <FaTicketAlt size={20} />,
-    title: "Ticket",
-    amount: 49.0,
-  },
-  {
-    icon1: <MdOutlineRestaurant size={20} />,
-    title: "Restaurant",
-    amount: 189.0,
-  },
-  {
-    icon1: <MdOutlineLocalGroceryStore size={20} />,
-    title: "Grocery",
-    amount: 249.0,
-  },
-  {
-    icon1: <FaBasketShopping size={20} />,
-    title: "Utilities",
-    amount: 89.0,
-  },
-  {
-    icon1: <GiClothes size={20} />,
-    title: "Clothes",
-    amount: 50.0,
-  },
-  {
-    icon1: <HiCubeTransparent size={20} />,
-    title: "Rent",
-    amount: 50.0,
-  },
-  {
-    icon1: <GrMoney size={20} />,
-    title: "Mortgage",
-    amount: 50.0,
-  },
-  {
-    icon1: <RiMoneyDollarCircleLine size={20} />,
-    title: "Finance",
-    amount: 50.0,
-  },
-  {
-    icon1: <FaRegCreditCard size={20} />,
-    title: "Credit",
-    amount: 50.0,
-  },
-];
+import { getAllCategoriesName } from "@/lib/actions/category.action";
 
 type Props = {
   _id: string;
@@ -90,6 +27,7 @@ type Props = {
 };
 
 export default async function Categories() {
+  //const result = await getAllCategoriesName();
   return (
     <div className="w-full min-h-40 ">
       <div className="flex justify-between gap-4">

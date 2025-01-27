@@ -17,6 +17,18 @@ type createExpenseParams = {
   path: string;
 };
 
+type updateExpenseParams = {
+  expense: {
+    _id: string;
+    details: string;
+    categoryId: string;
+    payee: string;
+    amount: number;
+    payMethod: string;
+  };
+  path: string;
+};
+
 export async function createExpense({ expense, path }: createExpenseParams) {
   const user = await currentUser();
 
@@ -75,3 +87,25 @@ export const getAllExpenses = async () => {
     throw new Error("Failed to fetch expenses.");
   }
 };
+
+// update
+export async function updateExpense() {
+  const user = await currentUser();
+
+  if (!user) {
+    throw new Error("user not authincated");
+  }
+
+  const userId = user.id;
+  try {
+    await connectToDB();
+  } catch (error) {}
+}
+
+// delete
+
+export async function deleteExpense() {
+  try {
+    await connectToDB();
+  } catch (error) {}
+}

@@ -11,14 +11,22 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
-import { deleteEvent } from "@/lib/actions/income.action";
+import { deleteCategory } from "@/lib/actions/category.action";
+import { deleteIncome } from "@/lib/actions/income.action";
+
 import { Delete, Trash2 } from "lucide-react";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useTransition } from "react";
 
-export function DeleteBtn({ incomeId }: { incomeId: string }) {
+type DeleteProps = {
+  idForDelete: string;
+  type: "category" | "income" | "expenses";
+};
+
+export function DeleteBtn({ idForDelete, type }: DeleteProps) {
   const pathname = usePathname();
   let [isPending, startTransition] = useTransition();
+  const router = useRouter();
 
   return (
     <AlertDialog>
@@ -41,7 +49,12 @@ export function DeleteBtn({ incomeId }: { incomeId: string }) {
             className="bg-red-500 "
             onClick={() =>
               startTransition(async () => {
-                await deleteEvent({ incomeId, path: pathname });
+                if (type === "category") {
+                  await deleteCategory({ idForDelete, path: pathname });
+                }
+                if (type === "income") {
+                  await deleteIncome({ idForDelete, path: pathname });
+                }
               })
             }
           >
